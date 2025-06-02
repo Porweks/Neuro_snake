@@ -90,7 +90,7 @@ class Neuro_BigBoss(nn.Module):
 class Neuro_NotSoBigBoss(nn.Module):
     def __init__(self):
         super().__init__()
-        self.fc1=nn.Linear(17, 256)
+        self.fc1=nn.Linear(21, 256)
         self.fc2=nn.Linear(256,3)
 
     def forward(self,x):
@@ -111,7 +111,7 @@ class QTrainer:
         self.lr = lr
         self.gamma = gamma
         self.model = model
-        self.model.load_state_dict(torch.load('model/model992.pth'))#, map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load('model/model318.pth'))#, map_location=torch.device('cpu')))
         self.optimizer = torch.optim.Adam(model.parameters(), lr=self.lr)
         self.criterion = nn.MSELoss()##.cuda()
 
@@ -203,12 +203,12 @@ class Champion():
 class Snake:
     def __init__(self):
         self.field = torch.zeros((32, 32), dtype=torch.float)
-        self.field[0, :32] = torch.Tensor([1, 2, 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32])
-        self.field[1,:32] = torch.Tensor([64,63,62,61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33]) # [хвост, голова, яблоко]
-        # self.field[0, :4] = torch.Tensor([1, 2, 3,4]) # [хвост, голова, яблоко]
-        # self.field[1,5] =  torch.Tensor([-1])
-        self.field[2,1] = torch.Tensor([65])
-        self.field[2,5] =  torch.Tensor([-1])
+        # self.field[0, :32] = torch.Tensor([1, 2, 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32])
+        # self.field[1,:32] = torch.Tensor([64,63,62,61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33]) # [хвост, голова, яблоко]
+        self.field[0, :4] = torch.Tensor([1, 2, 3,4]) # [хвост, голова, яблоко]
+        self.field[1,5] =  torch.Tensor([-1])
+        # self.field[2,1] = torch.Tensor([65])
+        # self.field[2,5] =  torch.Tensor([-1])
         self.a = torch.zeros((32, 32), dtype=torch.float)
         self.dirrection = torch.tensor([0,1])
         self.head_cords = [0,1]
@@ -271,8 +271,8 @@ class Snake:
         r =self.dirrection.tolist()==[0,1]
         d =self.dirrection.tolist()==[1,0]
         return [u,l,r,d,
-                # self.head_cords[0]<self.apple_cords[0],self.head_cords[0]>self.apple_cords[0],
-                # self.head_cords[1]<self.apple_cords[1],self.head_cords[1]>self.apple_cords[1],
+                self.head_cords[0]<self.apple_cords[0],self.head_cords[0]>self.apple_cords[0],
+                self.head_cords[1]<self.apple_cords[1],self.head_cords[1]>self.apple_cords[1],
                 (u==self.collision[0]==1 or l==self.collision[1]==1 or r==self.collision[2]==1 or d==self.collision[3]==1),
                 (u==self.collision[1]==1 or l==self.collision[3]==1 or r==self.collision[0]==1 or d==self.collision[2]==1),
                 (u==self.collision[2]==1 or l==self.collision[0]==1 or r==self.collision[3]==1 or d==self.collision[1]==1)]
